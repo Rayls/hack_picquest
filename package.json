@@ -20,10 +20,14 @@
   "bugs": {
     "url": "https://github.com/Glavin001/Node-StrapKit/issues"
   },
-
   "dependencies": {
     "socket.io": "*",
-    "express": "*",
-    "bower": "*"
+    "express": "*"
+  },
+  "devDependencies": {
+    "bower": "*",
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-uglify": "~0.2.4"
   }
 }

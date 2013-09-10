@@ -1,2 +1,4 @@
+site/js/*
+site/css/*
 bower_components/*
 node_modules/*

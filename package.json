@@ -1,0 +1,29 @@
+{
+  "name": "Node-StrapKit",
+  "version": "0.0.0",
+  "description": "A template node project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Glavin001/Node-StrapKit.git"
+  },
+  "keywords": [
+    "template",
+    "node",
+    "kit"
+  ],
+  "author": "Dawson Reid and Glavin Wiechert",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/Glavin001/Node-StrapKit/issues"
+  },
+
+  "dependencies": {
+    "socket.io": "*",
+    "express": "*",
+    "bower": "*"
+  }
+}

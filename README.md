@@ -3,12 +3,14 @@ Node-StrapKit
 
 Bootstrap kit for Node.js projects. A toolkit providing things you may need to get started with a quick Node.js-Hack.
 
+
 Upon pulling the project run : 
-'''
+```
 npm install
-bower install
-'''
-to install all needed node and bower dependencies.
+grunt init
+```
+This will install all needed bower dependencies, and setup the needed directory structure.
+
 
 To fork this one GitHub (if you're Glavin): http://stackoverflow.com/a/3772812/2578205
 ```

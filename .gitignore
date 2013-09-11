@@ -8,4 +8,5 @@ lib/*
 node_modules/*
 source
 source/**
-
+temp
+temp/**

@@ -1,6 +1,11 @@
 .idea/*
 site/js/*
 site/css/*
+bower_components
 bower_components/*
+lib
+lib/*
 node_modules/*
+source
+source/**
 

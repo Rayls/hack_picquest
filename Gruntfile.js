@@ -5,18 +5,28 @@ Glavin Wiechert
 
 module.exports = function(grunt) {
 
-  // Project configuration.
-  grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
-      build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
-      }
-    }
+    // Project configuration.
+    grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+
+        uglify: {
+            options: {
+                mangle: true,
+                compress: true
+            },
+            target: {
+                files: {
+                    'site/js/head.min.js' : [
+                    ],
+                    'site/js/foot.min.js' : [
+                    ]
+                }
+            }
+        },
+
+        less: {
+
+        }
   });
 
   // load grunt plugins
@@ -24,7 +34,8 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', [
-    'uglify'
+    'uglify',
+    'less'
   ]);
 
 };

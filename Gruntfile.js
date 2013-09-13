@@ -26,14 +26,6 @@ module.exports = function(grunt) {
             }
         },
 
-        mincss: {
-            main: {
-                files: {
-                    'site/css/main.min.css': [ 'temp/css/**.css' ]
-                }
-            }
-        },
-
         bower: {
             install: {
                 install: true
@@ -44,30 +36,10 @@ module.exports = function(grunt) {
             site: {
                 create: [
                     'site/css',
-                    'site/js'
-                ]
-            },
-            source: {
-                create: [
-                    'source/css/css',
-                    'source/css/less',
-                    'source/css/sass',
-                    'source/css/styl',
-
-                    'source/cljs',
-                    'source/coffee',
-                    'source/js',
-                    'source/type'
-                ]
-            },
-            temp: {
-                create: [
-                    'temp/css',
-                    'temp/js/foot',
-                    'temp/js/head'
+                    'site/js',
+                    'site/sass'
                 ]
             }
-
         },
 
         watch: {
@@ -83,90 +55,9 @@ module.exports = function(grunt) {
                 tasks: []
             },
 
-            /*
-            Watch source directories.
-             */
-            css_css: {
-                files: ['source/css/**.css'],
-                tasks: ['copy:css']
-            },
-            css_less: {
-                files: ['source/less/**.js'],
-                tasks: []
-            },
-            css_sass: {
+            sass: {
                 files: ['source/sass/**.js'],
                 tasks: []
-            },
-            css_styl: {
-                files: ['source/styl/**.js'],
-                tasks: []
-            },
-
-            cljs: {
-                files: ['source/cljs/**.cljs'],
-                tasks: []
-            },
-            coffee: {
-                files: ['source/coffee/**.coffee'],
-                tasks: []
-            },
-
-            js_js_foot: {
-                files: ['source/js/js/foot/**.js'],
-                tasks: ['copy:js_foot']
-            },
-            js_js_head: {
-                files: ['source/js/js/head/**.js'],
-                tasks: ['copy:js_head']
-            },
-            js_type_foot: {
-                files: ['source/type/**.type'],
-                tasks: []
-            },
-            js_type_head: {
-
-            },
-
-
-            /*
-            Minify contents of temp/css, temp/js/foot, and temp/js/head.
-             */
-            temp_css: {
-                files: ['temp/css/**.css'],
-                tasks: ['mincss:main']
-            },
-            temp_js_foot: {
-                files: ['temp/js/foot/**.js'],
-                tasks: ['uglify:foot']
-            },
-            temp_js_head: {
-                files: ['temp/js/head/**.js'],
-                tasks: ['uglify:head']
-            }
-        },
-
-        copy: {
-            css: {
-                expand: true,
-                src: 'source/css/**',
-                dest: 'temp/css',
-                flatten: true,
-                filter: 'isFile'
-            },
-            js_foot: {
-                expand: true,
-                src: 'source/js/js/foot/**',
-                dest: 'temp/js/foot/',
-                flatten: true,
-                filter: 'isFile'
-            },
-            js_head: {
-                expand: true,
-                src: 'source/js/js/head/**',
-                dest: 'temp/js/head/',
-                flatten: true,
-                filter: 'isFile'
             }
         }
   });
@@ -176,8 +67,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-mincss');
 
   // Default task(s).
   grunt.registerTask('default', [

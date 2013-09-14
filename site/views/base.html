@@ -9,9 +9,8 @@
         
         <script src='bower_components/jquery/jquery.min.js'></script>
 
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css"/>
-        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+        <link rel="stylesheet" href="bower_components/jquery-mobile-bower/css/jquery.mobile-1.3.2.min.css"/>
+        <script src="bower_components/jquery-mobile-bower/js/jquery.mobile-1.3.2.min.js"></script>
 
         <script type="text/javascript">
             var Clay = Clay || {};
@@ -25,26 +24,31 @@
                 clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
                 var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
             } )();
-            </script>
+        </script>
 
-            <script type="text/javascript">
+        <script type="text/javascript">
 
+            var clayLogin = function(response) {
+                if (response.success) {
+                    $.mobile.navigate('/home');
+                    $('#pq-menu').toggleClass('hidden');
+                }
+            };
+
+            $(document).on('pageinit', function(){
                 Clay.ready(function() {
 
                     if (Clay.Player.loggedIn) {
                         $.mobile.navigate('/home');
+                        $('#pq-menu').toggleClass('hidden');
                     } else {
                         $.mobile.navigate('/login');
-                        Clay.Player.login({ signup : false }, function(response) {
-                            if (response.success) {
-                                $.mobile.navigate('/home');
-                                $('#pq-menu').toggleClass('hidden');
-                            }
-                        });
+                        Clay.Player.login({ signup : false }, clayLogin);
                     }
                 });
+            });
 
-            </script>
+        </script>
     </head>
     <body>
 
@@ -62,17 +66,19 @@
                     <ul>
                         <li>
                             <a href="/achievment" data-transition="fade" data-theme="" data-icon="">
-                                Achievements
+                                Acheivement
                             </a>
                         </li>
+                        {% block center-btn %}
                         <li>
-                            <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                                Snap Pic!
+                            <a href="" data-transition="fade" data-theme="" data-icon="">
+                             Map
                             </a>
                         </li>
+                        {% endblock %}
                         <li>
-                            <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                                My Profile
+                            <a href="/profile" data-transition="fade" data-theme="" data-icon="">
+                                Me
                             </a>
                         </li>
                     </ul>

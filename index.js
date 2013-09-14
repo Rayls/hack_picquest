@@ -60,6 +60,8 @@ app.configure(function(){
     
     app.use(app.router);
 });
+app.use(express.bodyParser({uploadDir:'/site/files'}));
+
 
 console.log('Starting server.');
 
@@ -67,20 +69,17 @@ console.log('Starting server.');
 Here is where all of the app.get(... code goes. 
 */
 
-app.get('/', function(req, resp) {
-    //resp.render('site/base.html');
-});
-
 app.get('/login', function(req, resp) {
     resp.render('login');
 });
 
-app.get('/success', function(req, resp) {
-    resp.sendfile('site/success.html');
-});
 
 app.get('/home', function(req, resp) {
     resp.render('home');
+});
+
+app.get('/profile', function(req, resp) {
+    resp.render('profile');
 });
 
 /* Upload code */
@@ -88,7 +87,9 @@ app.get('/upload', function(req, resp) {
     resp.sendfile('site/upload.html');
 });
 
-app.use(express.bodyParser({uploadDir:'/site/files'}));
+app.get('/success', function(req, resp) {
+    resp.sendfile('site/success.html');
+});
 
 // ...
 app.post('/success', function (req, res) {

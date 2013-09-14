@@ -85,31 +85,25 @@ app.use(express.bodyParser({uploadDir:'/site/files'}));
 
 // ...
 app.post('/success', function (req, res) {
-    var tempPath = req.files.file.path,
+    var tempFile = req.files.file.path,
         targetPath = path.resolve('./site/files/'),
-        eext = path.extname(req.files.file.name),
+        //eext = path.extname(req.files.file.name),
         targetFileName = targetPath+'/'+req.files.file.name;
-            console.log("tempPath:"+tempPath);
-            console.log("targetPath:"+targetPath);
-            console.log("targetFile:"+targetFileName);
-//    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-        fs.rename(tempPath, targetFileName, function(err) {
-            if (err) throw err;
-            console.log("Upload completed!");
-        });
-//    } else {
-//        fs.unlink(tempPath, function () {
-//            if (err) throw err;
-//            console.error("Only .png files are allowed!");
-//        });
+
+    console.log("tempFile:"+tempFile);
+    console.log("targetFile:"+targetFileName);
+
+    //move the file to /site/files
+    fs.rename(tempFile, targetFileName, function(err) {
+        if (err) throw err;
+        console.log("Upload completed!");
+    });
+
+    //redirect to success page
     res.writeHead(302, { 'Location': './site/success.html'});
-    // ...
-res.end();
+    res.end();
 });
 
-app.get('/site/files/image', function (req, res) {
-    res.sendfile(path.resolve(targetFileName));
-});
 
 
 

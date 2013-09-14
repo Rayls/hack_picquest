@@ -12,10 +12,43 @@
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css"/>
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+
+        <script type="text/javascript">
+            var Clay = Clay || {};
+            Clay.gameKey = "piquest";
+            Clay.readyFunctions = [];
+            Clay.ready = function( fn ) {
+                Clay.readyFunctions.push( fn );
+            };
+            ( function() {
+                var clay = document.createElement("script"); clay.async = true;
+                clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
+                var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
+            } )();
+            </script>
+
+            <script type="text/javascript">
+
+                Clay.ready(function() {
+
+                    if (Clay.Player.loggedIn) {
+                        $.mobile.navigate('/home');
+                    } else {
+                        $.mobile.navigate('/login');
+                        Clay.Player.login({ signup : false }, function(response) {
+                            if (response.success) {
+                                $.mobile.navigate('/home');
+                                $('#pq-menu').toggleClass('hidden');
+                            }
+                        });
+                    }
+                });
+
+            </script>
     </head>
     <body>
 
-        <div data-role="page" id="page1">
+        <div data-role="page" id="{% block pageId %}{% endblock %}">
             <div data-theme="a" data-role="header">
                 <h3>
                     Piquest
@@ -25,21 +58,21 @@
             {% block content  %}{% endblock %}
 
             <div class='pq-row'>
-                <div id='pq-menu' data-role="navbar" data-iconpos="top">
+                <div id='pq-menu' class='hidden' data-role="navbar" data-iconpos="top">
                     <ul>
                         <li>
-                            <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                                Button
+                            <a href="/achievment" data-transition="fade" data-theme="" data-icon="">
+                                Achievements
                             </a>
                         </li>
                         <li>
                             <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                                Button
+                                Snap Pic!
                             </a>
                         </li>
                         <li>
                             <a href="#page1" data-transition="fade" data-theme="" data-icon="">
-                                Button
+                                My Profile
                             </a>
                         </li>
                     </ul>

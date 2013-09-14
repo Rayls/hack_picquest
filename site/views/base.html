@@ -26,29 +26,6 @@
             } )();
         </script>
 
-        <script type="text/javascript">
-
-            var clayLogin = function(response) {
-                if (response.success) {
-                    $.mobile.navigate('/home');
-                    $('#pq-menu').toggleClass('hidden');
-                }
-            };
-
-            $(document).on('pageinit', function(){
-                Clay.ready(function() {
-
-                    if (Clay.Player.loggedIn) {
-                        $.mobile.navigate('/home');
-                        $('#pq-menu').toggleClass('hidden');
-                    } else {
-                        $.mobile.navigate('/login');
-                        Clay.Player.login({ signup : false }, clayLogin);
-                    }
-                });
-            });
-
-        </script>
     </head>
     <body>
 
@@ -65,13 +42,13 @@
                 <div id='pq-menu' class='hidden' data-role="navbar" data-iconpos="top">
                     <ul>
                         <li>
-                            <a href="/achievment" data-transition="fade" data-theme="" data-icon="">
+                            <a href="/achievement" data-transition="fade" data-theme="" data-icon="">
                                 Acheivement
                             </a>
                         </li>
                         {% block center-btn %}
                         <li>
-                            <a href="" data-transition="fade" data-theme="" data-icon="">
+                            <a href="/home" data-transition="fade" data-theme="" data-icon="">
                              Map
                             </a>
                         </li>
@@ -88,6 +65,24 @@
         </div>
 
         {% block script %}{% endblock %}
+
+        <script type="text/javascript">
+
+            $(document).on('pageinit', function(){
+                Clay.ready(function() {
+
+                    if (!Clay.Player.loggedIn) {
+
+                        if (window.location.pathname !== '/login') {
+                            window.location = '/login';
+                        }
+                    } else {
+                        $('#pq-menu').removeClass('hidden');
+                    }
+                });
+            });
+
+        </script>
 
         <script src='bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
     </body>

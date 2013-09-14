@@ -4,7 +4,32 @@
 
     {% block content %}
         
-        <a data-role="button">Login</a>
+        <a id='pq-login' data-role="button">Login</a>
+        <script>
+        	$('#pq-login-btn').click(function() {
+
+        	});
+        </script>
 
     {% endblock %}
+
+    {% block script %}
+    <script type="text/javascript">
+
+    $(document).on('pageinit', function(){
+        Clay.ready(function() {
+
+        	Clay.Player.requireLogin(function(response) {
+                console.log(response);
+                if (response.success) {
+                    window.location = '/home';
+                }
+            }, false);
+        
+        });
+     });
+
+     </script>
+    {% endblock %}
+    
         

@@ -39,8 +39,8 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.session({
         store: memStore,
-        secret: 'dugtrio',
-        key: 'diglett.sid'
+        secret: 'piquest',
+        key: 'piquest.sid'
     }));
     
     app.use(app.router);
@@ -53,7 +53,15 @@ Here is where all of the app.get(... code goes.
 */
 
 app.get('/', function(req, resp) {
-  resp.sendfile('site/index.html');
+    resp.sendfile('site/base.html');
+});
+
+app.get('/login', function(req, resp) {
+    resp.sendfile('site/login.html');
+});
+
+app.get('/home', function(req, resp) {
+    resp.sendfile('site/home.html');
 });
 
 server.listen(1337);

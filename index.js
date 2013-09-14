@@ -22,11 +22,11 @@ var
     server = http.createServer(app),
     memStore = new express.session.MemoryStore();
 
-var swig = require('swig');
-app.engine('html', swig.renderFile);
-app.set('view engine', 'html');
-app.set('views','site' + '/views');
-app.set('view cache', false);
+//var swig = require('swig');
+//app.engine('html', swig.renderFile);
+//app.set('view engine', 'html');
+//app.set('views','site' + '/views');
+//app.set('view cache', false);
 
 
 console.log('Configuring server.');
@@ -86,25 +86,29 @@ app.use(express.bodyParser({uploadDir:'/site/files'}));
 // ...
 app.post('/success', function (req, res) {
     var tempPath = req.files.file.path,
-        targetPath = path.resolve('./site/files/image.png');
-    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-        fs.rename(tempPath, targetPath, function(err) {
+        targetPath = path.resolve('./site/files/'),
+        eext = path.extname(req.files.file.name),
+        targetFileName = targetPath+'/'+req.files.file.name;
+            console.log("tempPath:"+tempPath);
+            console.log("targetPath:"+targetPath);
+            console.log("targetFile:"+targetFileName);
+//    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
+        fs.rename(tempPath, targetFileName, function(err) {
             if (err) throw err;
             console.log("Upload completed!");
         });
-    } else {
-        fs.unlink(tempPath, function () {
-            if (err) throw err;
-            console.error("Only .png files are allowed!");
-        });
-    }
+//    } else {
+//        fs.unlink(tempPath, function () {
+//            if (err) throw err;
+//            console.error("Only .png files are allowed!");
+//        });
     res.writeHead(302, { 'Location': './site/success.html'});
     // ...
 res.end();
 });
 
-app.get('/files/image.png', function (req, res) {
-    res.sendfile(path.resolve('./files/image.png'));
+app.get('/site/files/image', function (req, res) {
+    res.sendfile(path.resolve(targetFileName));
 });
 
 

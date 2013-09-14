@@ -43,11 +43,8 @@ navigator.getMedia = ( navigator.getUserMedia ||
 		button.onclick = function() {
 			canvas.getContext("2d").drawImage(video, 0, 0, 300, 300, 0, 0, 300, 300);
 			var img = canvas.toDataURL("image/png");
-			    console.log("img:"+img);
 			document.getElementById('canvasImg').src = img;
-			    console.log("img:"+img);
-			    //console.log("dataURL:"+dataURL);
-			//alert("done");
+			console.log("img:"+img);
 		};
 	}, function(err) { alert("there was an error " + err)});
 </script>

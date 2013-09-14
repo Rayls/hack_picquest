@@ -63,6 +63,11 @@ module.exports = function(grunt) {
                 tasks: []
             },
 
+            node: {
+                files: ['index.js'],
+                tasks: []
+            },
+            
             sass: {
                 files: ['site/sass/**.scss'],
                 tasks: ['sass']

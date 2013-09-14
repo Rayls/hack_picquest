@@ -1,7 +1,7 @@
 {
-  "name": "Node-StrapKit",
+  "name": "Piquest",
   "version": "0.0.0",
-  "description": "A template node project.",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,10 +15,10 @@
     "node",
     "kit"
   ],
-  "author": "Dawson Reid and Glavin Wiechert",
+  "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/Glavin001/Node-StrapKit/issues"
+    "url": "https://github.com/dreid93/piquest"
   },
   "dependencies": {
     "socket.io": "*",
@@ -35,6 +35,7 @@
     "grunt-mkdir": "~0.1.1",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-bower-task": "~0.3.2",
-    "grunt-contrib-sass": "~0.5.0"
+    "grunt-contrib-sass": "~0.5.0",
+    "swig": "~1.0.0-rc2"
   }
 }

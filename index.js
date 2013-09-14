@@ -77,7 +77,6 @@ app.get('/login', function(req, resp) {
     resp.render('login');
 });
 
-
 app.get('/home', function(req, resp) {
     resp.render('home');
 });
@@ -90,6 +89,7 @@ app.get('/achievement', function(req, resp) {
     resp.render('achievement');
 });
 
+
 /* Upload code */
 app.get('/upload', function(req, resp) {
     resp.sendfile('site/upload.html');
@@ -98,6 +98,7 @@ app.get('/upload', function(req, resp) {
 app.get('/success', function(req, resp) {
     resp.sendfile('site/success.html');
 });
+
 
 // ...
 app.post('/uploader', function (req, res) {
@@ -121,9 +122,6 @@ app.post('/uploader', function (req, res) {
     res.writeHead(302, { 'Location': './site/success.html'});
     res.end();
 });
-
-
-
 
 
 

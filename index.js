@@ -100,28 +100,28 @@ app.get('/success', function(req, resp) {
 });
 
 // ...
-app.post('/success', function (req, res) {
-    var tempPath = req.files.file.path,
-        targetPath = path.resolve('./site/files/image.png');
-    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-        fs.rename(tempPath, targetPath, function(err) {
-            if (err) throw err;
-            console.log("Upload completed!");
-        });
-    } else {
-        fs.unlink(tempPath, function () {
-            if (err) throw err;
-            console.error("Only .png files are allowed!");
-        });
-    }
+app.post('/uploader', function (req, res) {
+    var tempFile = req.files.file.path,
+        targetPath = path.resolve('./site/files/'),
+        //eext = path.extname(req.files.file.name),
+        ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        targetFileName = targetPath+'/'+ip+"-"+req.files.file.name;
+
+    console.log("tempFile:"+tempFile);
+    console.log("targetFile:"+targetFileName);
+    console.log("ip:"+ip);
+
+    //move the file to /site/files
+    fs.rename(tempFile, targetFileName, function(err) {
+        if (err) throw err;
+        console.log("Upload completed!");
+    });
+
+    //redirect to success page
     res.writeHead(302, { 'Location': './site/success.html'});
-    // ...
-res.end();
+    res.end();
 });
 
-app.get('/files/image.png', function (req, res) {
-    res.sendfile(path.resolve('./files/image.png'));
-});
 
 
 

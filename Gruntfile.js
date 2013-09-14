@@ -43,10 +43,11 @@ module.exports = function(grunt) {
         },
        
         sass: {
-            files: {
-                'site/css/main.css': 'site/sass/main.scss'
+            site: {
+                files: {
+                    'site/css/main.css': 'site/sass/main.scss'
+                }
             }
-
         },
 
         watch: {
@@ -81,7 +82,6 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('init', [
-    'bower',
     'mkdir'
   ])
 

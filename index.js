@@ -21,6 +21,13 @@ var
     server = http.createServer(app),
     memStore = new express.session.MemoryStore();
 
+var swig = require('swig');
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views','site' + '/views');
+app.set('view cache', false);
+
+
 console.log('Configuring server.');
 
 app.configure(function(){
@@ -53,15 +60,15 @@ Here is where all of the app.get(... code goes.
 */
 
 app.get('/', function(req, resp) {
-    resp.sendfile('site/base.html');
+    //resp.render('site/base.html');
 });
 
 app.get('/login', function(req, resp) {
-    resp.sendfile('site/login.html');
+    resp.render('login');
 });
 
 app.get('/home', function(req, resp) {
-    resp.sendfile('site/home.html');
+    resp.render('home');
 });
 
 server.listen(1337);

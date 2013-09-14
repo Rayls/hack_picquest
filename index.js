@@ -12,14 +12,18 @@ var
   fs = require('fs'),
   url = require('url'),
   express = require('express'),
-  path = require('path'); //for image upload -Andrew
+  path = require('path'),
+  https = require('https'); //for image upload -Andrew
 
 var userStore = {};
 
 // create and init my server
 var 
     app = express(),
-    server = http.createServer(app),
+    server = https.createServer({
+      key: fs.readFileSync('keys/server.key', 'utf8'),
+      cert: fs.readFileSync('keys/server.crt', 'utf8')
+    }, app),
     memStore = new express.session.MemoryStore();
 
 var swig = require('swig');

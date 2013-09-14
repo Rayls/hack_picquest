@@ -41,6 +41,13 @@ module.exports = function(grunt) {
                 ]
             }
         },
+       
+        sass: {
+            files: {
+                'site/css/main.css': 'site/sass/main.scss'
+            }
+
+        },
 
         watch: {
             options: {
@@ -56,17 +63,17 @@ module.exports = function(grunt) {
             },
 
             sass: {
-                files: ['source/sass/**.js'],
-                tasks: []
+                files: ['site/sass/**.scss'],
+                tasks: ['sass']
             }
         }
   });
 
   // load grunt plugins
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-mkdir');
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
   // Default task(s).
   grunt.registerTask('default', [

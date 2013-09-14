@@ -23,28 +23,42 @@
           window.fbAsyncInit = function() {
             // init the FB JS SDK
             FB.init({
-              appId      : '330446327093034',                        // App ID from the app dashboard
-              channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
-              status     : true,                                 // Check Facebook Login status
-              xfbml      : true                                  // Look for social plugins on the page
+                appId      : '330446327093034',                        // App ID from the app dashboard
+                channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
+                status     : true,                                 // Check Facebook Login status
+                xfbml      : true,                                  // Look for social plugins on the page
+                oauth: true,
+                cookie: true
             });
+
+            var uid = null,
+                accessToken = null;
 
             FB.getLoginStatus(function(response) {
                 console.log('login status : ' + response.status);
                 if (response.status === 'connected') {
-                    // the user is logged in and has authenticated your
-                    // app, and response.authResponse supplies
-                    // the user's ID, a valid access token, a signed
-                    // request, and the time the access token 
-                    // and signed request each expire
-                    var uid = response.authResponse.userID;
-                    var accessToken = response.authResponse.accessToken;
+                    accessToken = response.authResponse.accessToken;
+                    //console.log(response.authResponse);
+
+                    {% block fb_script %}{% endblock %}
+
                 } else {
                     if (window.location.pathname !== '/login') {
                         window.location = '/login';
                     }
                 }
             });
+
+            FB.Event.subscribe('auth.authResponseChange', function(response) {
+                // Here we specify what we do with the response anytime this event occurs. 
+                if (response.status === 'connected') {
+
+                } else if (response.status === 'not_authorized') {
+                  FB.login();
+                } else {
+                  FB.login();
+                }
+              });
 
             // Additional initialization code such as adding Event Listeners goes here
           };

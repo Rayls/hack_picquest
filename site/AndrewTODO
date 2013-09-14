@@ -1,4 +1,0 @@
-define route for upload
-app.post /upload/pic
-how does express allow you to upload pic?
-insert db entry for each new pic

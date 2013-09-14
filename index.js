@@ -22,11 +22,11 @@ var
     server = http.createServer(app),
     memStore = new express.session.MemoryStore();
 
-//var swig = require('swig');
-//app.engine('html', swig.renderFile);
-//app.set('view engine', 'html');
-//app.set('views','site' + '/views');
-//app.set('view cache', false);
+var swig = require('swig');
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views','site' + '/views');
+app.set('view cache', false);
 
 
 console.log('Configuring server.');
@@ -84,14 +84,16 @@ app.get('/upload', function(req, resp) {
 app.use(express.bodyParser({uploadDir:'/site/files'}));
 
 // ...
-app.post('/success', function (req, res) {
+app.post('/uploader', function (req, res) {
     var tempFile = req.files.file.path,
         targetPath = path.resolve('./site/files/'),
         //eext = path.extname(req.files.file.name),
-        targetFileName = targetPath+'/'+req.files.file.name;
+        ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        targetFileName = targetPath+'/'+ip+"-"+req.files.file.name;
 
     console.log("tempFile:"+tempFile);
     console.log("targetFile:"+targetFileName);
+    console.log("ip:"+ip);
 
     //move the file to /site/files
     fs.rename(tempFile, targetFileName, function(err) {

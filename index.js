@@ -77,6 +77,10 @@ app.get('/login', function(req, resp) {
     resp.render('login');
 });
 
+app.get('/canvas', function(req, resp) {
+    resp.render('canvas');
+});
+
 app.get('/home', function(req, resp) {
     resp.render('home');
 });
@@ -89,8 +93,6 @@ app.get('/achievement', function(req, resp) {
     resp.render('achievement');
 });
 
-<<<<<<< HEAD
-=======
 
 /* Upload code */
 
@@ -126,7 +128,7 @@ app.post('/uploader', function (req, res) {
 
 
 
-server.listen(1338);
+server.listen(1339);
 
 io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {

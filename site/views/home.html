@@ -4,6 +4,7 @@
 
     {% block content %}
         <div data-role='content' class='pq-content'>
+
             <div style="width:100%; height:200px;" id="map"></div>
             <script>
                 var map = L.map('map').setView([44.8544, -63.1992], 13);
@@ -17,8 +18,43 @@
 
     {% block center-btn %}
     <li>
-        <a href="/upload" data-transition="fade" data-theme="" data-icon="">
+        <a id='pq-shutter-btn' data-transition="fade" data-theme="" data-icon="">
             Snap Pic!
         </a>
+
+        <div style='display:none;'>
+
+            <form id='pq-camera' method="post" enctype="multipart/form-data" action="/uploader">
+                <input type="file" accept="image/*;capture=camera" name="file">
+            </form>
+
+            <script>
+
+                $('pq-sutter-btn').addClass('ui-btn-active');
+
+                // Not showing vendor prefixes or code that works cross-browser.
+                navigator.getMedia = ( navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+                function getLocation()
+                {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(showPosition);
+                    }
+                }
+                        
+                function showPosition(position)
+                {
+                    console.log('lat : ' + position.coords.latitude);
+                    console.log('lon : ' + position.coords.longitude); 
+                }
+
+                $('#pq-shutter-btn').click(function(event) {
+                    getLocation();
+                });
+            </script>
+        </div>
     </li>
     {% endblock %}

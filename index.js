@@ -11,7 +11,8 @@ var
   util = require('util'),
   fs = require('fs'),
   url = require('url'),
-  express = require('express');
+  express = require('express'),
+  path = require('path'); //for image upload -Andrew
 
 var userStore = {};
 
@@ -60,11 +61,51 @@ app.get('/login', function(req, resp) {
     resp.sendfile('site/login.html');
 });
 
+app.get('/success', function(req, resp) {
+    resp.sendfile('site/success.html');
+});
+
 app.get('/home', function(req, resp) {
     resp.sendfile('site/home.html');
 });
 
-server.listen(1337);
+/* Upload code */
+app.get('/upload', function(req, resp) {
+    resp.sendfile('site/upload.html');
+});
+
+app.use(express.bodyParser({uploadDir:'/site/files'}));
+
+// ...
+app.post('/success', function (req, res) {
+    var tempPath = req.files.file.path,
+        targetPath = path.resolve('./site/files/image.png');
+    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
+        fs.rename(tempPath, targetPath, function(err) {
+            if (err) throw err;
+            console.log("Upload completed!");
+        });
+    } else {
+        fs.unlink(tempPath, function () {
+            if (err) throw err;
+            console.error("Only .png files are allowed!");
+        });
+    }
+    //res.write('File Uploaded');
+    //res.sendfile('./site/success.html');
+    // ...
+res.end();
+});
+
+app.get('/files/image.png', function (req, res) {
+    res.sendfile(path.resolve('./files/image.png'));
+});
+
+
+
+
+
+server.listen(1338);
 
 io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {

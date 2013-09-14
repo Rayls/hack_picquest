@@ -22,5 +22,8 @@
   "dependencies": {
     "jquery": "*",
     "bootstrap": "*"
+  },
+  "devDependencies": {
+    "openlayers": "https://github.com/openlayers/openlayers.git#~2.13.1"
   }
 }

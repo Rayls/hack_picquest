@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+    {% block pageId %}profile{% endblock %}
+
+    {% block content %}
+    <div data-role='content'>
+    	<a id='pq-logout-btn' data-role="button">Logout</a>
+    	<script>
+
+    		$('#pq-logout-btn').click(function(event) {
+    			
+    			Clay.Player.logout({}, function(response) {
+
+    				window.location = '/login';
+    			});
+    		});
+    	</script>
+    </div>
+    {% endblock %}

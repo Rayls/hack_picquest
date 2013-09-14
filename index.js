@@ -12,17 +12,28 @@ var
   fs = require('fs'),
   url = require('url'),
   express = require('express'),
-  path = require('path'); //for image upload -Andrew
+  path = require('path'),
+  https = require('https'); //for image upload -Andrew
 
 var userStore = {};
 
 // create and init my server
 var 
     app = express(),
+    /*
+    server = https.createServer({
+      key: fs.readFileSync('keys/server.key', 'utf8'),
+      cert: fs.readFileSync('keys/server.crt', 'utf8')
+    }, app),
+    /*/
     server = http.createServer(app),
+    //*/
     memStore = new express.session.MemoryStore();
 
 var swig = require('swig');
+swig.setDefaults({ 
+  cache: false 
+});
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views','site' + '/views');
@@ -53,6 +64,8 @@ app.configure(function(){
     
     app.use(app.router);
 });
+app.use(express.bodyParser({uploadDir:'/site/files'}));
+
 
 console.log('Starting server.');
 
@@ -60,20 +73,21 @@ console.log('Starting server.');
 Here is where all of the app.get(... code goes. 
 */
 
-app.get('/', function(req, resp) {
-    //resp.render('site/base.html');
-});
-
 app.get('/login', function(req, resp) {
     resp.render('login');
 });
 
-app.get('/success', function(req, resp) {
-    resp.sendfile('site/success.html');
-});
 
 app.get('/home', function(req, resp) {
     resp.render('home');
+});
+
+app.get('/profile', function(req, resp) {
+    resp.render('profile');
+});
+
+app.get('/achievement', function(req, resp) {
+    resp.render('achievement');
 });
 
 /* Upload code */
@@ -81,7 +95,9 @@ app.get('/upload', function(req, resp) {
     resp.sendfile('site/upload.html');
 });
 
-app.use(express.bodyParser({uploadDir:'/site/files'}));
+app.get('/success', function(req, resp) {
+    resp.sendfile('site/success.html');
+});
 
 // ...
 app.post('/uploader', function (req, res) {

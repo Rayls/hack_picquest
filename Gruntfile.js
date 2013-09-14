@@ -50,27 +50,27 @@ module.exports = function(grunt) {
             }
         },
 
+        less: {
+            site: {
+                files: {
+                    'site/css/main.less.css': 'site/less/*.less'
+                }
+            }
+        },
+
         watch: {
             options: {
                 livereload: true
             },
-
-            /* TODO
-            Restart upon change to the grunt file.
-             */
-            grunt: {
-                files: ['Gruntfile.js'],
-                tasks: []
-            },
-
-            node: {
-                files: ['index.js'],
-                tasks: []
-            },
             
             sass: {
-                files: ['site/sass/**.scss'],
+                files: ['site/sass/*.scss'],
                 tasks: ['sass']
+            },
+
+            less: {
+                files: ['site/less/*.less'],
+                tasks: ['less']
             }
         }
   });
@@ -80,6 +80,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   // Default task(s).
   grunt.registerTask('default', [

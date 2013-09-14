@@ -24,6 +24,7 @@
     "bootstrap": "*"
   },
   "devDependencies": {
-    "openlayers": "https://github.com/openlayers/openlayers.git#~2.13.1"
+    "openlayers": "https://github.com/openlayers/openlayers.git#~2.13.1",
+    "jquery-mobile-bower": "~1.3.2"
   }
 }

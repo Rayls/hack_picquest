@@ -90,15 +90,15 @@ app.get('/achievement', function(req, resp) {
     resp.render('achievement');
 });
 
-/* Upload code */
 app.get('/upload', function(req, resp) {
-    resp.sendfile('site/upload.html');
+    resp.render('upload');
 });
 
 app.get('/success', function(req, resp) {
     resp.sendfile('site/success.html');
 });
 
+/* Upload code */
 // ...
 app.post('/uploader', function (req, res) {
     var tempFile = req.files.file.path,

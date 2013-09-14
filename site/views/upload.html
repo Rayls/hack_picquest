@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+    {% block pageId %}Snap Pic!{% endblock %}
+
+    {% block content %}
+    <div data-role='content'>
+
+	<form method="post" enctype="multipart/form-data" action="/uploader">
+	    <input type="file" accept="image/*;capture=camera" name="file">
+	    <input type="submit" value="Submit">
+	</form>
+    </div>
+    {% endblock %}
+    
+    {% block center-btn %}
+    <li>
+        <a href="" data-transition="fade" data-theme="" data-icon="">
+            Snap Pic!
+        </a>
+    </li>
+    {% endblock %}

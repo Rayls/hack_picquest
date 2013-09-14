@@ -23,6 +23,9 @@ var
     memStore = new express.session.MemoryStore();
 
 var swig = require('swig');
+swig.setDefaults({ 
+  cache: false 
+});
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views','site' + '/views');

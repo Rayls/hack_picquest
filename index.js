@@ -82,6 +82,10 @@ app.get('/profile', function(req, resp) {
     resp.render('profile');
 });
 
+app.get('/achievement', function(req, resp) {
+    resp.render('achievement');
+});
+
 /* Upload code */
 app.get('/upload', function(req, resp) {
     resp.sendfile('site/upload.html');

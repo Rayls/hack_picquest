@@ -4,9 +4,16 @@
 
     {% block content %}
         
-    	<a data-role="button">Logout</a>
+    	<a id='pq-logout-btn' data-role="button">Logout</a>
     	<script>
-    		
+
+    		$('#pq-logout-btn').click(function(event) {
+    			
+    			Clay.Player.logout({}, function(response) {
+
+    				window.location = '/login';
+    			});
+    		});
     	</script>
 
     {% endblock %}

@@ -2,14 +2,9 @@
 
 	{% block pageId %}login{% endblock %}
 
-    {% block content %}
-        
-        <a id='pq-login' data-role="button">Login</a>
-        <script>
-        	$('#pq-login-btn').click(function() {
+	{% block pq-menu-class %}hidden{% endblock %}
 
-        	});
-        </script>
+    {% block content %}
 
     {% endblock %}
 
@@ -21,7 +16,7 @@
 
         	Clay.Player.requireLogin(function(response) {
                 console.log(response);
-                if (response.success) {
+                if (Clay.Player.loggedIn) {
                     window.location = '/home';
                 }
             }, false);

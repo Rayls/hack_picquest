@@ -39,7 +39,7 @@
             {% block content  %}{% endblock %}
 
             <div class='pq-row'>
-                <div id='pq-menu' class='hidden' data-role="navbar" data-iconpos="top">
+                <div id='pq-menu' class='{% block pq-menu-class %}{% endblock %}' data-role="navbar" data-iconpos="top">
                     <ul>
                         <li>
                             <a href="/achievement" data-transition="fade" data-theme="" data-icon="">
@@ -68,7 +68,7 @@
 
         <script type="text/javascript">
 
-            $(document).on('pageinit', function(){
+            $(document).ready(function(){
                 Clay.ready(function() {
 
                     if (!Clay.Player.loggedIn) {
@@ -76,8 +76,6 @@
                         if (window.location.pathname !== '/login') {
                             window.location = '/login';
                         }
-                    } else {
-                        $('#pq-menu').removeClass('hidden');
                     }
                 });
             });

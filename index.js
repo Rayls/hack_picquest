@@ -89,8 +89,6 @@ app.get('/achievement', function(req, resp) {
     resp.render('achievement');
 });
 
-<<<<<<< HEAD
-=======
 
 /* Upload code */
 

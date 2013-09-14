@@ -20,10 +20,14 @@ var userStore = {};
 // create and init my server
 var 
     app = express(),
+    /*
     server = https.createServer({
       key: fs.readFileSync('keys/server.key', 'utf8'),
       cert: fs.readFileSync('keys/server.crt', 'utf8')
     }, app),
+    /*/
+    server = http.createServer(app),
+    //*/
     memStore = new express.session.MemoryStore();
 
 var swig = require('swig');

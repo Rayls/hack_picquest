@@ -6,27 +6,26 @@
 
     {% block content %}
     <div data-role='content'>
-
+    	<a id='pq-login-btn' data-role="button">Login with Facebook</a>
     </div>
     {% endblock %}
 
     {% block script %}
     <script type="text/javascript">
 
-    $(document).on('pageinit', function(){
-        Clay.ready(function() {
+    	$('#pq-login-btn').click(function(event) {
+			FB.login(function(resp) {
+				if (resp.authResponse) {
+					window.location = '/home';
+				} else {
+					console.log('Login not authorised.');
+				}
+			}, {
+				scope: 'email'
+			});
+		});
 
-        	Clay.Player.requireLogin(function(response) {
-                console.log(response);
-                if (Clay.Player.loggedIn) {
-                    window.location = '/home';
-                }
-            }, false);
-        
-        });
-     });
-
-     </script>
+    </script>
     {% endblock %}
     
         

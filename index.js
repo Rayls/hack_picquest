@@ -91,8 +91,7 @@ app.post('/success', function (req, res) {
             console.error("Only .png files are allowed!");
         });
     }
-    //res.write('File Uploaded');
-    //res.sendfile('./site/success.html');
+    res.writeHead(302, { 'Location': './site/success.html'});
     // ...
 res.end();
 });

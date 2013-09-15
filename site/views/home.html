@@ -51,39 +51,61 @@
         </a>
 
         <div style='display:none;'>
-
             <form id='pq-camera' method="post" enctype="multipart/form-data" action="/uploader">
                 <input type="image" accept="image/*;capture=camera" name="file">
             </form>
-
-            <script>
-
-                $('pq-sutter-btn').addClass('ui-btn-active');
-
-                // Not showing vendor prefixes or code that works cross-browser.
-                navigator.getMedia = ( navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia ||
-                         navigator.msGetUserMedia);
-                        
-                function showPosition(position)
-                {
-                    console.log('lat : ' + position.coords.latitude);
-                    console.log('lon : ' + position.coords.longitude); 
-                }
-
-                $('#pq-shutter-btn').click(function(event) {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(funcion(position) {
-                            var map = document.getElementById('pg-map-frame').contentWindow['map'];
-                            L.marker([
-                                ]).addTo(map);
-                        });
-                    }
-                });
-            </script>
         </div>
     </li>
     {% endblock %}
 
-    {% block script %}{% endblock %}
+    {% block script %}
+    <script>
+        // Not showing vendor prefixes or code that works cross-browser.
+        navigator.getMedia = ( navigator.getUserMedia ||
+                 navigator.webkitGetUserMedia ||
+                 navigator.mozGetUserMedia ||
+                 navigator.msGetUserMedia);
+                
+        function showPosition(position)
+        {
+            console.log('lat : ' + position.coords.latitude);
+            console.log('lon : ' + position.coords.longitude); 
+        }
+
+        filepicker.setKey('AWQaB0oFgTMqs6g05olNFz');
+
+        $('#pq-shutter-btn').click(function(event) {
+            console.log('Click!');
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+
+                    showPosition(position);
+
+                    filepicker.pick({
+                            mimetype: 'image/*',
+                            container: 'window',
+                            services:['WEBCAM', 'FACEBOOK'],
+                        }, 
+                        function(InkBlob) {
+
+                            var map = document.getElementById('pg-map-frame').contentWindow['map'];
+                            var marker = L.marker([
+                                position.coords.latitude,
+                                position.coords.longitude
+                            ]).addTo(map)
+
+                            marker.on('click', function(event) {
+                                console.log('Why Hello!');
+                            });
+                        }, 
+                        function(FPError) {
+                           console.log(FPError.toString());
+                        }
+                    );
+                });
+            }
+        });
+        
+    </script>
+    {% endblock %}

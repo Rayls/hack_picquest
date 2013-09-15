@@ -81,6 +81,10 @@ app.get('/canvas', function(req, resp) {
     resp.render('canvas');
 });
 
+app.get('/', function(req, resp) {
+    resp.render('home');
+});
+
 app.get('/home', function(req, resp) {
     resp.render('home');
 });

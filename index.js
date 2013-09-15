@@ -127,7 +127,7 @@ app.post('/uploader', function (req, res) {
 
 
 
-server.listen(1339);
+server.listen(8080);
 
 io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {

@@ -1,11 +1,11 @@
 {
-  "name": "Node-StrapKit",
+  "name": "Pig.io",
   "version": "0.0.0",
-  "homepage": "https://github.com/Glavin001/Node-StrapKit",
+  "homepage": "https://github.com/Glavin001/pigio",
   "authors": [
-    "Dawson Reid <dreid93@gmail.com> and Glavin Wiechert <glavin.wiechert@gmail.com>"
+    "Dawson Reid <dreid93@gmail.com>"
   ],
-  "description": "A node.js project template.",
+  "description": "",
   "main": "index.js",
   "keywords": [
     "node",

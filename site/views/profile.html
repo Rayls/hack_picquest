@@ -16,7 +16,7 @@
 
 			        {% block fb_script %}
 			        $(document).ready(function() {
-				        var address = 'https://graph.facebook.com/' + user.id + '?fields=name,about,bio,picture.type(large)';
+				        var address = 'https://graph.facebook.com/' + user.id + '?fields=name,picture.type(large)';
 				        console.log('FB GET - ' + address);
 						$.get(address, function(data, textStatus, jqXHR) {
 						

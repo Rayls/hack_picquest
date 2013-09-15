@@ -3,6 +3,82 @@
     {% block pageId %}home{% endblock %}
 
     {% block content %}
+    <script>
+    // load previous images
+    FB.getLoginStatus(function(response) {
+            //console.log('login status : ' + response.status);
+            
+        if (response.status === 'connected') {
+            accessToken = response.authResponse.accessToken;
+            //console.log(response.authResponse);
+            
+            {% block fb_script %}
+            var createMarker = function(map, lat, lon, url) {
+                var marker = L.marker([ lat, lon ]).addTo(map);
+
+                // marker click listener
+                marker.on('click', function(e) {
+
+                    var modal = picoModal({
+                        content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
+                        '<iframe width=100% height=300px src="' + url + '"></iframe>',
+                        modalStyles: {
+                            width: '300px',
+                            margin: '0px 0px 0px -150px',
+                            background: "#eee", 
+                            padding: "5px 10px",
+                            borderRadius: "5px", 
+                            border: "1px solid #ccc"
+                        }
+                    });
+                });
+            };
+
+            var loadFacebookAlbum = function(accessToken, albumId) {
+                console.log('attempting to load album - ' + albumId);
+
+                var address = 'https://graph.facebook.com/' + albumId + '/photos?' +
+                    'access_token=' + accessToken;
+
+                $.get(address, function(images, textStatus, jqXHR) {
+                    console.log(JSON.stringify(images, null, 2));
+
+                    // retriving images from facebook
+                    var map = document.getElementById('pg-map-frame').contentWindow['map'];
+                    for (var i in images.data) {
+                        var image = images.data[i]; 
+                        var coords = image.name.split('x'),
+                            lat = parseFloat(coords[0]),
+                            lon = parseFloat(coords[1]);
+                        createMarker(map, lat, lon, image.source);
+                    }
+
+                }).fail(function(data, textStatus, jgXHR) {
+                    console.log('failed to retrieve images for album - ' + albumId);
+                });
+            };
+
+            // get the user objcet
+            FB.api('/me/albums?access_token=' + accessToken, function(albums) {
+                //console.log('user : ' + JSON.stringify(user, null, 2));
+                console.log(JSON.stringify(albums, null, 2));  
+                for (var i in albums.data) {
+                    if (albums.data[i].name === "Pig.io Photos") {
+                        loadFacebookAlbum(accessToken, albums.data[i].id);
+                        return;
+                    }
+                }             
+            });
+            {% endblock %}
+
+        } else {
+            if (window.location.pathname !== '/login') {
+                window.location = '/login';
+            }
+        }
+    });
+    </script>
+
     <div data-role='content' class='pq-content'>
         <iframe id='pg-map-frame' width=100% src="map.html"></iframe> 
     </div>
@@ -11,18 +87,34 @@
     {% block center-btn %}
     <li>
         <a id='pq-shutter-btn' data-transition="fade" data-theme="" data-icon="">Snap Pic!</a>
-
-        <div style='display:none;'>
-            <form id='pq-camera' method="post" enctype="multipart/form-data" action="/uploader">
-                <input type="image" accept="image/*;capture=camera" name="file">
-            </form>
-        </div>
     </li>
     {% endblock %}
 
     {% block script %}
     <script src="bower_components/PicoModal/src/picoModal.js"></script>
     <script>
+
+    var createMarker = function(map, lat, lon, url) {
+        var marker = L.marker([ lat, lon ]).addTo(map);
+
+        // marker click listener
+        marker.on('click', function(e) {
+
+            var modal = picoModal({
+                content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
+                '<iframe width=100% height=300px src="' + url + '"></iframe>',
+                modalStyles: {
+                    width: '300px',
+                    margin: '0px 0px 0px -150px',
+                    background: "#eee", 
+                    padding: "5px 10px",
+                    borderRadius: "5px", 
+                    border: "1px solid #ccc"
+                }
+            });
+        });
+    };
+
     var resizeMap = function() {
         //console.log('Formatting iframe height.');
         var mapFrame = $('#pg-map-frame');
@@ -70,30 +162,10 @@
                     function(InkBlob) {
 
                         var map = document.getElementById('pg-map-frame').contentWindow['map'];
-                        var marker = L.marker([
+                        createMarker(map, 
                             position.coords.latitude,
-                            position.coords.longitude
-                        ]).addTo(map)
-
-                        // marker click listener
-                        marker.on('click', function(e) {
-
-                            var lon = position.coords.longitude,
-                                        lat = position.coords.latitude;
-                                    
-                            var modal = picoModal({
-                                content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
-                                '<iframe width=100% height=300px src="' + InkBlob.url + '"></iframe>',
-                                modalStyles: {
-                                    width: '300px',
-                                    margin: '0px 0px 0px -150px',
-                                    background: "#eee", 
-                                    padding: "5px 10px",
-                                    borderRadius: "5px", 
-                                    border: "1px solid #ccc"
-                                }
-                            });
-                        });
+                            position.coords.longitude,
+                            InkBlob.url);
 
                         // save the marker to facebook
                         FB.getLoginStatus(function(response) {
@@ -109,11 +181,13 @@
 
                                     var address = 'https://graph.facebook.com/' + user.id + '/photos?' + 
                                         'access_token=' + accessToken + '&' +
-                                        'url=' + InkBlob.url;
+                                        'url=' + InkBlob.url + '&' + 
+                                        'message=' + position.coords.latitude.toFixed(3) + 'x' + 
+                                        position.coords.longitude.toFixed(3);
                                     console.log('FB POST - ' + address);
                                     
                                     $.post(address, function(data, textStatus, jqXHR) {
-                                    
+                                        // image has been successfuly created
                                         console.log('FB response : ' + JSON.stringify(data, null, 2));
                                         
                                     }).fail(function(data, textStatus, jqXHR) {
@@ -135,36 +209,5 @@
             });
         }
     }); 
-
-    var loadFacebookAlbum = function(albumId) {
-
-    };
-
-    // load previous images
-    FB.getLoginStatus(function(response) {
-            //console.log('login status : ' + response.status);
-            
-        if (response.status === 'connected') {
-            accessToken = response.authResponse.accessToken;
-            //console.log(response.authResponse);
-
-            // get the user objcet
-            FB.api('/me/albums?access_token=' + accessToken, function(albums) {
-                //console.log('user : ' + JSON.stringify(user, null, 2));
-                console.log(JSON.stringify(albums, null, 2));  
-                for (var i in albums.data) {
-                    if (albums.data[i].name === "Pig.io Photos") {
-                        loadFacebookAlbum(albums.data[i].id);
-                        return;
-                    }
-                }             
-            });
-
-        } else {
-            if (window.location.pathname !== '/login') {
-                window.location = '/login';
-            }
-        }
-    });
     </script>
     {% endblock %}

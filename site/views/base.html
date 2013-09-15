@@ -89,7 +89,7 @@
                 </h3>
             </div>
 
-            {% block content  %}{% endblock %}
+            {% block content %}{% endblock %}
 
             <div class='pq-row'>
                 <div id='pq-menu' class='{% block pq-menu-class %}{% endblock %}' data-role="navbar" data-iconpos="top">
@@ -115,9 +115,8 @@
                 </div>
             </div>
         
+            {% block script %}{% endblock %}
         </div>
-
-        {% block script %}{% endblock %}
 
         <script src='bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
     </body>

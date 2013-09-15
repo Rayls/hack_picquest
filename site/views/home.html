@@ -3,34 +3,14 @@
     {% block pageId %}home{% endblock %}
 
     {% block content %}
-        <script>
-            $(document).ready(function() {
-                var resizeMap = function() {
-                //console.log('Formatting iframe height.');
-                var mapFrame = $('#pg-map-frame');
-
-                var documentHeight = $(document).height() ;
-                //console.log('doc height : ' + documentHeight);
-
-                mapFrame.height($(document).height() - 5 - 
-                    (parseInt($('div[data-role="content"]').css('padding-top'), 10) + parseInt($('div[data-role="content"]').css('padding-bottom'), 10)) -
-                    ($('#pq-menu').height() + $('div[data-role="header"]').height()));
-                }; resizeMap();
-
-                $(window).resize(resizeMap);
-            });
-        </script>
-
-        <div data-role='content' class='pq-content'>
-            <iframe id='pg-map-frame' width=100% src="map.html"></iframe> 
-        </div>
+    <div data-role='content' class='pq-content'>
+        <iframe id='pg-map-frame' width=100% src="map.html"></iframe> 
+    </div>
     {% endblock %}
 
     {% block center-btn %}
     <li>
-        <a id='pq-shutter-btn' data-transition="fade" data-theme="" data-icon="">
-            Snap Pic!
-        </a>
+        <a id='pq-shutter-btn' data-transition="fade" data-theme="" data-icon="">Snap Pic!</a>
 
         <div style='display:none;'>
             <form id='pq-camera' method="post" enctype="multipart/form-data" action="/uploader">
@@ -43,81 +23,97 @@
     {% block script %}
     <script src="bower_components/PicoModal/src/picoModal.js"></script>
     <script>
-        // Not showing vendor prefixes or code that works cross-browser.
-        navigator.getMedia = ( navigator.getUserMedia ||
-                 navigator.webkitGetUserMedia ||
-                 navigator.mozGetUserMedia ||
-                 navigator.msGetUserMedia);
-                
-        function showPosition(position)
-        {
-            console.log('lat : ' + position.coords.latitude);
-            console.log('lon : ' + position.coords.longitude); 
-        }
+    var resizeMap = function() {
+        //console.log('Formatting iframe height.');
+        var mapFrame = $('#pg-map-frame');
 
-        filepicker.setKey('AWQaB0oFgTMqs6g05olNFz');
+        var documentHeight = $(document).height() ;
+        //console.log('doc height : ' + documentHeight);
 
-        $('#pq-shutter-btn').click(function(event) {
-            console.log('Click!');
+        mapFrame.height($(document).height() - 5 - 
+            (parseInt($('div[data-role="content"]').css('padding-top'), 10) + parseInt($('div[data-role="content"]').css('padding-bottom'), 10)) -
+            ($('#pq-menu').height() + $('div[data-role="header"]').height()));
+    }; 
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
+    $(document).ready(function() {
+        resizeMap();
+        console.log('resize the map');
+    });
 
-                    showPosition(position);
+    // Not showing vendor prefixes or code that works cross-browser.
+    navigator.getMedia = ( navigator.getUserMedia ||
+             navigator.webkitGetUserMedia ||
+             navigator.mozGetUserMedia ||
+             navigator.msGetUserMedia);
+            
+    function showPosition(position)
+    {
+        console.log('lat : ' + position.coords.latitude);
+        console.log('lon : ' + position.coords.longitude); 
+    }
 
-                    filepicker.pick({
-                            mimetype: 'image/*',
-                            container: 'window',
-                            services:['WEBCAM', 'FACEBOOK'],
-                        }, 
-                        function(InkBlob) {
+    filepicker.setKey('AWQaB0oFgTMqs6g05olNFz');
 
-                            var map = document.getElementById('pg-map-frame').contentWindow['map'];
-                            var marker = L.marker([
-                                position.coords.latitude,
-                                position.coords.longitude
-                            ]).addTo(map)
+    $('#pq-shutter-btn').click(function(event) {
+        console.log('Click!');
 
-                            marker.on('click', function(e) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
 
-                                FB.getLoginStatus(function(response) {
-                                    console.log('login status : ' + response.status);
+                showPosition(position);
+
+                filepicker.pick({
+                        mimetype: 'image/*',
+                        container: 'window',
+                        services:['WEBCAM', 'FACEBOOK'],
+                    }, 
+                    function(InkBlob) {
+
+                        var map = document.getElementById('pg-map-frame').contentWindow['map'];
+                        var marker = L.marker([
+                            position.coords.latitude,
+                            position.coords.longitude
+                        ]).addTo(map)
+
+                        marker.on('click', function(e) {
+
+                            FB.getLoginStatus(function(response) {
+                                console.log('login status : ' + response.status);
+                                
+                                if (response.status === 'connected') {
+                                    accessToken = response.authResponse.accessToken;
+                                    //console.log(response.authResponse);
+
+                                    var lon = position.coords.longitude,
+                                        lat = position.coords.latitude;
                                     
-                                    if (response.status === 'connected') {
-                                        accessToken = response.authResponse.accessToken;
-                                        //console.log(response.authResponse);
-
-                                        var lon = position.coords.longitude,
-                                            lat = position.coords.latitude;
-                                        
-                                        var modal = picoModal({
-                                            content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
-                                            '<iframe width=100% height=300px src="' + InkBlob.url + '"></iframe>',
-                                            modalStyles: {
-                                                width: '300px',
-                                                margin: '0px 0px 0px -150px',
-                                                background: "#eee", 
-                                                padding: "5px 10px",
-                                                borderRadius: "5px", 
-                                                border: "1px solid #ccc"
-                                            }
-                                        });
-
-                                    } else {
-                                        if (window.location.pathname !== '/login') {
-                                            window.location = '/login';
+                                    var modal = picoModal({
+                                        content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
+                                        '<iframe width=100% height=300px src="' + InkBlob.url + '"></iframe>',
+                                        modalStyles: {
+                                            width: '300px',
+                                            margin: '0px 0px 0px -150px',
+                                            background: "#eee", 
+                                            padding: "5px 10px",
+                                            borderRadius: "5px", 
+                                            border: "1px solid #ccc"
                                         }
+                                    });
+
+                                } else {
+                                    if (window.location.pathname !== '/login') {
+                                        window.location = '/login';
                                     }
-                                });
+                                }
                             });
-                        }, 
-                        function(FPError) {
-                           console.log(FPError.toString());
-                        }
-                    );
-                });
-            }
-        });
-        
+                        });
+                    }, 
+                    function(FPError) {
+                       console.log(FPError.toString());
+                    }
+                );
+            });
+        }
+    }); 
     </script>
     {% endblock %}

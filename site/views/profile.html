@@ -1,9 +1,52 @@
 {% extends 'base.html' %}
 
+	<script type='text/html'>
+
+	</script>
+
+	<script>
+	{% block fb_script %}
+	    
+	    FB.api('/me?access_token=' + accessToken, function(user) {
+	        //console.log('user : ' + JSON.stringify(user, null, 2));
+
+	        var address = 'https://graph.facebook.com/' + user.id + '?fields=name,picture.type(large)';
+	        //console.log(address);
+			$.get(address, function(data, textStatus, jqXHR) {
+			
+				console.log('FB response : ' + JSON.stringify(data, null, 2));
+				$(document).ready(function() {
+					$('#pg-profile-name').text(data.name);
+					$('#pg-profile-img').attr('src', data.picture.data.url);
+				});
+
+			}).fail(function(data, textStatus, jqXHR) {
+				console.log('failed to retrieve user image.');
+			});				        
+	    });
+
+
+    {% endblock %}
+    </script>
+
     {% block pageId %}profile{% endblock %}
 
     {% block content %}
     <div data-role='content'>
+
+    	<div class="ui-grid-a">
+            <div class="ui-block-a">
+                <div id='pg-profile-frame' style="text-align: center; width: 100%; height: 180px; position: relative; background-color: #fbfbfb; border: 1px solid #b8b8b8;">
+                    <img id="pg-profile-img" alt="image">
+                </div>
+            </div>
+            <div style="text-align: center;" class="ui-block-b">
+            	<h2 id="pg-profile-name">
+		            Unknown Name
+		        </h2>
+            </div>
+        </div>	
+
     	<a id='pq-logout-btn' data-role="button">Logout</a>
     	<script>
     		console.log('register logout button');
@@ -14,11 +57,4 @@
     		});
     	</script>
     </div>
-    {% endblock %}
-
-    {% block fb_script %}
-    FB.api('/me?access_token=' + accessToken, function(resp) {
-        userData = resp;
-        console.log(userData);
-    });
     {% endblock %}

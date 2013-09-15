@@ -12,14 +12,20 @@
     <body >
     <div id="map"></div>
             <script>
-                //44.645575,-63.585461
-                var map = L.map('map').setView([44.645575, -63.585461], 14);
-                L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                //L.tileLayer('http://{s}.tile.cloudmade.com/ccb4d4ff50cc4c0da7f24d88c69842ce/997/256/{z}/{x}/{y}.png', {
-                    attribution: 'Map &copy; <a href="http://openstreetmap.org">OSM</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ©<a href="http://cloudmade.com">CloudMade</a>',
-                    maxZoom: 18
-                }).addTo(map);
-                map.invalidateSize();
+            var map;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+
+                    //44.645575,-63.585461
+                    map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 14);
+                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                    //L.tileLayer('http://{s}.tile.cloudmade.com/ccb4d4ff50cc4c0da7f24d88c69842ce/997/256/{z}/{x}/{y}.png', {
+                        attribution: 'Map &copy; <a href="http://openstreetmap.org">OSM</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ©<a href="http://cloudmade.com">CloudMade</a>',
+                        maxZoom: 18
+                    }).addTo(map);
+                    map.invalidateSize();
+                });
+            }
             </script>
     </body>
 </html>

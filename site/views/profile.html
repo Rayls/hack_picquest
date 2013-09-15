@@ -1,37 +1,48 @@
 {% extends 'base.html' %}
 
-	<script type='text/html'>
-
-	</script>
-
-	<script>
-	{% block fb_script %}
-	    
-	    FB.api('/me?access_token=' + accessToken, function(user) {
-	        //console.log('user : ' + JSON.stringify(user, null, 2));
-
-	        var address = 'https://graph.facebook.com/' + user.id + '?fields=name,picture.type(large)';
-	        //console.log(address);
-			$.get(address, function(data, textStatus, jqXHR) {
-			
-				console.log('FB response : ' + JSON.stringify(data, null, 2));
-				$(document).ready(function() {
-					$('#pg-profile-name').text(data.name);
-					$('#pg-profile-img').attr('src', data.picture.data.url);
-				});
-
-			}).fail(function(data, textStatus, jqXHR) {
-				console.log('failed to retrieve user image.');
-			});				        
-	    });
-
-
-    {% endblock %}
-    </script>
-
     {% block pageId %}profile{% endblock %}
 
     {% block content %}
+    <script>
+
+	if (FB) {
+		FB.getLoginStatus(function(response) {
+	        console.log('login status : ' + response.status);
+	        if (response.status === 'connected') {
+	            accessToken = response.authResponse.accessToken;
+
+	            FB.api('/me?access_token=' + accessToken, function(user) {
+			        //console.log('user : ' + JSON.stringify(user, null, 2));
+
+			        {% block fb_script %}
+			        $(document).ready(function() {
+				        var address = 'https://graph.facebook.com/' + user.id + '?fields=name,about,bio,picture.type(large)';
+				        console.log('FB GET - ' + address);
+						$.get(address, function(data, textStatus, jqXHR) {
+						
+							console.log('FB response : ' + JSON.stringify(data, null, 2));
+							$(document).ready(function() {
+								$('#pg-profile-name').text(data.name);
+								$('#pg-profile-img').attr('src', data.picture.data.url);
+							});
+
+						}).fail(function(data, textStatus, jqXHR) {
+							console.log('failed to retrieve user image.');
+						});
+					});
+					{% endblock %}				        
+			    });
+
+	        } else {
+	            if (window.location.pathname !== '/login') {
+	                window.location = '/login';
+	            }
+	        }
+	    });
+	}
+       
+    </script>
+
     <div data-role='content'>
 
     	<div class="ui-grid-a">

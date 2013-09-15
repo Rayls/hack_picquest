@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+    {% block pageId %}Snap Pic!{% endblock %}
+
+    {% block content %}
+    <div data-role='content'>
+
+	<video id="v" width="300" height="300"></video>
+	<input id="b" type="button"  value="Snap Pic!"></input>
+	<canvas id="c" style="display:none;" width="300" height="300"></canvas>
+        <img id="canvasImg">
+
+    </div>
+    {% endblock %}
+    
+    {% block center-btn %}
+    <li>
+        <a href="" data-transition="fade" data-theme="" data-icon="">
+            Snap Pic!
+        </a>
+    </li>
+    {% endblock %}
+        
+{% block script %}
+
+<script>
+
+navigator.getMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+
+
+	navigator.getMedia({video: true}, function(stream) {
+		var video = document.getElementById("v");
+		var canvas = document.getElementById("c");
+		var button = document.getElementById("b");
+ 
+		//video.src = stream;
+		video.src = window.URL.createObjectURL(stream);
+        	video.play();
+		button.disabled = false;
+		button.onclick = function() {
+			canvas.getContext("2d").drawImage(video, 0, 0, 300, 300, 0, 0, 300, 300);
+			var img = canvas.toDataURL("image/png");
+			document.getElementById('canvasImg').src = img;
+			console.log("img:"+img);
+		};
+	}, function(err) { alert("there was an error " + err)});
+</script>
+
+    {% endblock %}

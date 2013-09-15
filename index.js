@@ -77,6 +77,10 @@ app.get('/login', function(req, resp) {
     resp.render('login');
 });
 
+app.get('/canvas', function(req, resp) {
+    resp.render('canvas');
+});
+
 app.get('/home', function(req, resp) {
     resp.render('home');
 });
@@ -92,15 +96,14 @@ app.get('/achievement', function(req, resp) {
 
 /* Upload code */
 
-app.get('/success', function(req, resp) {
-    resp.sendfile('site/success.html');
-});
-
 app.get('/upload', function(req, resp) {
     resp.render('upload');
 });
 
 app.post('/uploader', function (req, res) {
+
+    console.log(JSON.stringify(null, 2, req.files));
+
     var tempFile = req.files.file.path,
         targetPath = path.resolve('./site/files/'),
         //eext = path.extname(req.files.file.name),
@@ -118,13 +121,13 @@ app.post('/uploader', function (req, res) {
     });
 
     //redirect to success page
-    res.writeHead(302, { 'Location': './site/success.html'});
+    //res.writeHead(302, { 'Location': './site/success.html'});
     res.end();
 });
 
 
 
-server.listen(1336);
+server.listen(8080);
 
 io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {

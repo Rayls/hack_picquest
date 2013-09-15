@@ -15,3 +15,10 @@
     	</script>
     </div>
     {% endblock %}
+
+    {% block fb_script %}
+    FB.api('/me?access_token=' + accessToken, function(resp) {
+        userData = resp;
+        console.log(userData);
+    });
+    {% endblock %}

@@ -93,6 +93,10 @@ app.get('/profile', function(req, resp) {
     resp.render('profile');
 });
 
+app.get('/map.html', function(req, resp) {
+    resp.render('map');
+});
+
 app.get('/achievement', function(req, resp) {
     resp.render('achievement');
 });

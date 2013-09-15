@@ -75,37 +75,57 @@
                             position.coords.longitude
                         ]).addTo(map)
 
+                        // marker click listener
                         marker.on('click', function(e) {
 
-                            FB.getLoginStatus(function(response) {
-                                console.log('login status : ' + response.status);
-                                
-                                if (response.status === 'connected') {
-                                    accessToken = response.authResponse.accessToken;
-                                    //console.log(response.authResponse);
-
-                                    var lon = position.coords.longitude,
+                            var lon = position.coords.longitude,
                                         lat = position.coords.latitude;
                                     
-                                    var modal = picoModal({
-                                        content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
-                                        '<iframe width=100% height=300px src="' + InkBlob.url + '"></iframe>',
-                                        modalStyles: {
-                                            width: '300px',
-                                            margin: '0px 0px 0px -150px',
-                                            background: "#eee", 
-                                            padding: "5px 10px",
-                                            borderRadius: "5px", 
-                                            border: "1px solid #ccc"
-                                        }
-                                    });
-
-                                } else {
-                                    if (window.location.pathname !== '/login') {
-                                        window.location = '/login';
-                                    }
+                            var modal = picoModal({
+                                content: "Lon : " + lon.toFixed(3) + ', Lat : ' + lat.toFixed(3) + 
+                                '<iframe width=100% height=300px src="' + InkBlob.url + '"></iframe>',
+                                modalStyles: {
+                                    width: '300px',
+                                    margin: '0px 0px 0px -150px',
+                                    background: "#eee", 
+                                    padding: "5px 10px",
+                                    borderRadius: "5px", 
+                                    border: "1px solid #ccc"
                                 }
                             });
+                        });
+
+                        // save the marker to facebook
+                        FB.getLoginStatus(function(response) {
+                                //console.log('login status : ' + response.status);
+                                
+                            if (response.status === 'connected') {
+                                accessToken = response.authResponse.accessToken;
+                                //console.log(response.authResponse);
+
+                                // get the user objcet
+                                FB.api('/me?access_token=' + accessToken, function(user) {
+                                    //console.log('user : ' + JSON.stringify(user, null, 2));
+
+                                    var address = 'https://graph.facebook.com/' + user.id + '/photos?' + 
+                                        'access_token=' + accessToken + '&' +
+                                        'url=' + InkBlob.url;
+                                    console.log('FB POST - ' + address);
+                                    
+                                    $.post(address, function(data, textStatus, jqXHR) {
+                                    
+                                        console.log('FB response : ' + JSON.stringify(data, null, 2));
+                                        
+                                    }).fail(function(data, textStatus, jqXHR) {
+                                        console.log('failed to save image to FB.');
+                                    });               
+                                });
+
+                            } else {
+                                if (window.location.pathname !== '/login') {
+                                    window.location = '/login';
+                                }
+                            }
                         });
                     }, 
                     function(FPError) {
@@ -115,5 +135,36 @@
             });
         }
     }); 
+
+    var loadFacebookAlbum = function(albumId) {
+
+    };
+
+    // load previous images
+    FB.getLoginStatus(function(response) {
+            //console.log('login status : ' + response.status);
+            
+        if (response.status === 'connected') {
+            accessToken = response.authResponse.accessToken;
+            //console.log(response.authResponse);
+
+            // get the user objcet
+            FB.api('/me/albums?access_token=' + accessToken, function(albums) {
+                //console.log('user : ' + JSON.stringify(user, null, 2));
+                console.log(JSON.stringify(albums, null, 2));  
+                for (var i in albums.data) {
+                    if (albums.data[i].name === "Pig.io Photos") {
+                        loadFacebookAlbum(albums.data[i].id);
+                        return;
+                    }
+                }             
+            });
+
+        } else {
+            if (window.location.pathname !== '/login') {
+                window.location = '/login';
+            }
+        }
+    });
     </script>
     {% endblock %}

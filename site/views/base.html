@@ -53,12 +53,16 @@
 
             FB.Event.subscribe('auth.authResponseChange', function(response) {
                 // Here we specify what we do with the response anytime this event occurs. 
-                if (response.status === 'connected') {
-
-                } else if (response.status === 'not_authorized') {
-                  FB.login();
-                } else {
-                  FB.login();
+                if (response.status !== 'connected') {
+                    FB.login(function(resp) {
+                        if (resp.authResponse) {
+                            window.location = '/home';
+                        } else {
+                            console.log('Login not authorised.');
+                        }
+                    }, {
+                        scope: 'email,user_groups,user_likes,user_photos,user_about_me,user_friends,user_location,photo_upload'
+                    });
                 }
               });
 
